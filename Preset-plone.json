@@ -1,0 +1,63 @@
+[
+  {
+    "name": "Homepage",
+    "pattern" : "{%start%}"
+  },
+  {
+    "name": "ZMI Root",
+    "pattern" : "{%start%}/manage_main"
+  },
+  {
+    "name": "ZMI in place",
+    "pattern" : "{%start%}{%path%}/manage_main"
+  },
+  {
+    "name": "Portal Catalog",
+    "pattern" : "{%start%}/portal_catalog/manage_main"
+  },
+  {
+    "name": "Catalog portal type",
+    "pattern" : "{%start%}/portal_catalog/Indexes/portal_type/manage_browse"
+  },
+  {
+    "name": "Upgrade step",
+    "pattern" : "{%start%}/portal_setup/manage_upgrades"
+  },
+  {
+    "name": "Registry",
+    "pattern" : "{%start%}/portal_registry"
+  },
+  {
+    "name": "Control Panel",
+    "pattern" : "{%start%}/@@overview-controlpanel"
+  },
+  {
+    "name": "Modules",
+    "pattern" : "{%start%}/prefs_install_products_form"
+  },
+  {
+    "name": "Folder Content",
+    "pattern" : "{%start%}{%path%}/folder_contents"
+  },
+  {
+    "name": "Viewlet Manager",
+    "pattern" : "{%start%}{%path%}/@@manage-viewlets"
+  },
+  {
+    "name": "Export Content",
+    "pattern" : "{%start%}{%path%}/@@export_content"
+  },
+  {
+    "name": "Disable Diazo",
+    "pattern" : "{%start%}{%path%}{%query%}?diazo.off=1",
+    "query": true
+  },
+  {
+    "name": "Undo",
+    "pattern" : "{%start%}/Control_Panel/Database/main/manage_UndoForm"
+  },
+  {
+    "name": "Undo (plone 4)",
+    "pattern" : "{%start%}/manage_UndoForm"
+  }
+]

@@ -1,0 +1,43 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+
+}
+
+.tools {
+  svg path {
+    fill: white;
+  }
+
+}
+
+.shortcut-button {
+  width: 100%;
+  width: -moz-available;          /* WebKit-based browsers will ignore this. */
+  width: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
+  width: fill-available;
+
+  &.edition {
+    pointer-events: none;
+  }
+
+  .grab-icon {
+    position: absolute;
+    left: 1rem;
+  }
+}
+
+.drag-wrapper {
+  position: relative;
+
+  .delete-shortcut-wrapper {
+    position: absolute;
+    right: 0;
+    z-index: 5;
+    
+    svg {
+      fill: red;
+    }
+  }
+}
