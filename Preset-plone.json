@@ -44,8 +44,12 @@
     "pattern" : "{%start%}{%path%}/@@manage-viewlets"
   },
   {
-    "name": "Export Content",
+    "name": "Export Content (c.exportimport)",
     "pattern" : "{%start%}{%path%}/@@export_content"
+  },
+  {
+    "name": "Import Content (c.exportimport)",
+    "pattern" : "{%start%}{%path%}/@@import_content"
   },
   {
     "name": "Disable Diazo",
