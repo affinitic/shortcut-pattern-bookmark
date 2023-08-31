@@ -36,10 +36,10 @@ export const NewShortcutForm = (props) => {
               <ul>
                 <li>{'{%scheme%} : Scheme of the url (eg: http or https)'}</li>
                 <li>{'{%domain%} : Domain name of the url'}</li>
-                <li>{'{%port%} : Port of the url (and site root), if there is no port it will be ignore)'}</li>
+                <li>{'{%port%} : Port of the url (and site root), if there is no port it will be ignore'}</li>
                 <li>{'{%start%} : Concatenation of scheme, domain and port of the url'}</li>
-                <li>{'{%path%} : Path of the url, if there is no path it will be ignore)'}</li>
-                <li>{'{%query%} : Query of the url (part after "?"), if there is no query it will be ignore)'}</li>
+                <li>{'{%path%} : Path of the url, if there is no path it will be ignore'}</li>
+                <li>{'{%query%} : Query of the url (part after "?"), if there is no query it will be ignore'}</li>
               </ul>
             </label>
           </div>
