@@ -1,6 +1,12 @@
-import {useGetCurrentTabUrl, onClickShortcut, setStorageList, getStorageList, useLocalStorage} from "./chrome";
-import {stringToId} from "./string";
-import { newUrlGeneration, extractPartOfUrl } from './url';
+import {
+  useGetCurrentTabUrl,
+  onClickShortcut,
+  setStorageList,
+  getStorageList,
+  useLocalStorage,
+} from "./chrome";
+import { stringToId } from "./string";
+import { newUrlGeneration, extractPartOfUrl } from "./url";
 
 export {
   useGetCurrentTabUrl,
@@ -10,5 +16,5 @@ export {
   useLocalStorage,
   stringToId,
   newUrlGeneration,
-  extractPartOfUrl
+  extractPartOfUrl,
 };

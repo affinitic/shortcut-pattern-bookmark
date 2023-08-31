@@ -1,15 +1,15 @@
 const portPatern = [
   {
-    "from":8080,
-    "to": 8089,
-    'siteRoots': ["plone", "Plone"]
+    from: 8080,
+    to: 8089,
+    siteRoots: ["plone", "Plone"],
   },
   {
-    "from":3000,
-    "to": 3000,
-    'siteRoots': null
-  }
-]
+    from: 3000,
+    to: 3000,
+    siteRoots: null,
+  },
+];
 
 const getSiteRoot = (url, port) => {
   let result = "";
@@ -19,25 +19,25 @@ const getSiteRoot = (url, port) => {
         result = null;
         return;
       }
-      patern.siteRoots.forEach((siteRoot)=>{
+      patern.siteRoots.forEach((siteRoot) => {
         if (url.startsWith(siteRoot)) {
           result = siteRoot;
           return;
         }
         result = url.split("/")[0];
         return;
-      })
+      });
       return;
     }
-  })
+  });
   return result;
-}
+};
 
 export const extractPartOfUrl = (inputUrl) => {
   let url = inputUrl;
 
   const result = {
-    scheme : null,
+    scheme: null,
     domain: null,
     port: null,
     siteRoot: null,
@@ -49,29 +49,28 @@ export const extractPartOfUrl = (inputUrl) => {
     return result;
   }
 
-  if (url.startsWith('http:')){
-    result['scheme'] = 'http://';
+  if (url.startsWith("http:")) {
+    result["scheme"] = "http://";
     url = url.slice(7);
   }
-  if (url.startsWith('https:')){
-    result['scheme'] = 'https://';
+  if (url.startsWith("https:")) {
+    result["scheme"] = "https://";
     url = url.slice(8);
   }
 
-  const domainAndPort = url.split('/')[0];
-  const domainAndPortList = domainAndPort.split(':');
+  const domainAndPort = url.split("/")[0];
+  const domainAndPortList = domainAndPort.split(":");
 
   result["domain"] = domainAndPortList[0];
 
   if (domainAndPortList.length > 1) {
     result["port"] = domainAndPortList[1];
   }
-  
+
   url = url.slice(domainAndPort.length + 1);
 
   if (result["port"]) {
     result["siteRoot"] = getSiteRoot(url, result["port"]);
-    console.log("🚀 ~ file: url.js:66 ~ extractPartOfUrl ~ getSiteRoot(url, result[port]):", getSiteRoot(url, result["port"]))
     if (result["siteRoot"]) {
       url = url.slice(result["siteRoot"].length + 1);
     }
@@ -87,15 +86,13 @@ export const extractPartOfUrl = (inputUrl) => {
   }
 
   return result;
-
-}
+};
 
 export const newUrlGeneration = (url, patern) => {
-
   if (!url || !patern) {
     return "";
   }
-  
+
   const urlObj = extractPartOfUrl(url);
   let start = "";
   if (urlObj.scheme) {
@@ -104,33 +101,32 @@ export const newUrlGeneration = (url, patern) => {
   if (urlObj.domain) {
     start = start + urlObj.domain;
   }
-    if (urlObj.port) {
-    start = start + ':' + urlObj.port + '/' + urlObj.siteRoot;
+  if (urlObj.port) {
+    start = start + ":" + urlObj.port + "/" + urlObj.siteRoot;
   }
-  if (start === '') {
+  if (start === "") {
     start = null;
   }
   const paternMapping = {
-    "{%scheme%}" : urlObj.scheme,
-    "{%domain%}" : urlObj.domain,
+    "{%scheme%}": urlObj.scheme,
+    "{%domain%}": urlObj.domain,
     "{%port%}": urlObj.port ? ":" + urlObj.port + "/" + urlObj.siteRoot : null,
     "{%start%}": start,
-    "{%path%}": urlObj.path ? '/' + urlObj.path : null,
-    "{%query%}": urlObj.query ? '?' + urlObj.query : null
-  }
+    "{%path%}": urlObj.path ? "/" + urlObj.path : null,
+    "{%query%}": urlObj.query ? "?" + urlObj.query : null,
+  };
 
   let newUrl = patern;
 
-  Object.keys(paternMapping).forEach(key => {
-    const value = paternMapping[key]
+  Object.keys(paternMapping).forEach((key) => {
+    const value = paternMapping[key];
 
     if (value) {
-      newUrl = newUrl.replaceAll(key,value)
+      newUrl = newUrl.replaceAll(key, value);
     } else {
-      newUrl = newUrl.replaceAll(key,'')
+      newUrl = newUrl.replaceAll(key, "");
     }
-  })
-  
-  return newUrl;
+  });
 
-} 
+  return newUrl;
+};
