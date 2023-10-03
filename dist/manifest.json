@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "Shortcut Patern Bookmark",
+  "version": "0.0.1",
+  "description": "This extension is used to create shortcut with pattern as bookmark for website (eg: Plone, Wordpress, ...)",
+  "action": {
+    "default_popup": "index.html"
+  },
+  "permissions": [
+    "activeTab",
+    "storage",
+    "tabs"
+  ],
+  "background": {
+    "service_worker": "service-worker-loader.js",
+    "type": "module"
+  },
+  "icons": {
+    "16": "icon_16.png",
+    "32": "icon_32.png",
+    "48": "icon_48.png",
+    "128": "icon_128.png"
+  }
+}
