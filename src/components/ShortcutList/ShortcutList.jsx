@@ -1,7 +1,8 @@
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { Button } from "@mui/material";
 
 export const ShortcutList = (props) => {
-  const { edition, shortcutList, children, onObjDragEnd } = props;
+  const { edition, shortcutList, children, onObjDragEnd, onClickEdit } = props;
 
   const getItemStyle = (isDragging, draggableStyle) => {
     return {
@@ -57,6 +58,12 @@ export const ShortcutList = (props) => {
                       provided.draggableProps.style,
                     )}
                   >
+                    <Button 
+                      title="Edit"
+                      onClick={onClickEdit}
+                      buttonId={shortcut.id}
+                      className="edit-button"
+                    />
                     {children(shortcut)}
                   </div>
                 )}
