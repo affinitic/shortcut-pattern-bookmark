@@ -22,8 +22,10 @@ Click on the "+" icon at the bottom of the extension window. You can enter a nam
 - {%query%} : Query of the url (part after "?"), if there is no query it will be ignore
 
 ### Edit the currtent shortcut
-Click on the "pen" icon at the bottom of the extension window. You can delete a by clicking on the trash icon or you can reorder the shortcuts by drag and drop.
+Click on the "pen" icon at the bottom of the extension window. You can edit the shortcut name and pattern by clicking on the shortcut name, delete a by clicking on the trash icon or you can reorder the shortcuts by drag and drop.
 
+### Export import
+You can export and import shortcut and port settings by clicking on the arrow at the bottom of the extension window. By default when you export the action is set to 'set', in these case when imported it will override every thing already set, it can also be set to 'add', with that the content of the file will be append to the existing settings. The id part is not required, it will be generated at import.
 
 ## What's next
 - Add edition of a shortcut (change name and patern)
