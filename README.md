@@ -1,4 +1,4 @@
-# Shortcut Patern Bookmark
+# Shortcut Pattern Bookmark
 
 This extension is used to create shortcut base on a patern as bookmark for a type of website (eg: Plone, Wordpress, ...)
 
@@ -22,7 +22,7 @@ Click on the "+" icon at the bottom of the extension window. You can enter a nam
 - {%path%} : Path of the url, if there is no path it will be ignore
 - {%query%} : Query of the url (part after "?"), if there is no query it will be ignore
 
-### Edit the currtent shortcut
+### Edit the current shortcut
 Click on the "pen" icon at the bottom of the extension window. You can edit the shortcut name and pattern by clicking on the shortcut name, delete a by clicking on the trash icon or you can reorder the shortcuts by drag and drop.
 
 ### Export import
@@ -38,4 +38,4 @@ You can export and import shortcut and port settings by clicking on the arrow at
 - Add folder to arrange shortcut
 
 ## Contributors
-[@jimbiscuit](https://github.com/jimbiscuit) 
+- [@jimbiscuit](https://github.com/jimbiscuit) 
