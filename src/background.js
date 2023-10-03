@@ -19,13 +19,13 @@ chrome.runtime.onMessage.addListener(function (message, sender, callback) {
     if (message.newTab) {
       chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         const tab = tabs[0];
-        const newUrl = newUrlGeneration(tab.url, message.patern);
+        const newUrl = newUrlGeneration(tab.url, message.patern, message.ports);
         chrome.tabs.create({ url: newUrl });
       });
     } else {
       chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         const tab = tabs[0];
-        const newUrl = newUrlGeneration(tab.url, message.patern);
+        const newUrl = newUrlGeneration(tab.url, message.patern, message.ports);
         chrome.tabs.update(tab.id, { url: newUrl });
       });
     }
