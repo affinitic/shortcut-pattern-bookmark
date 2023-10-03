@@ -1,11 +1,13 @@
 import { useEffect, useState, useRef } from "react";
-import { NewShortcutForm, Shortcut, ShortcutList } from "./components";
+import { NewShortcutForm, Shortcut, ShortcutList, SettingsForm } from "./components";
 import { Tooltip, IconButton, Stack, Box } from "@mui/material";
-import { useGetCurrentTabUrl, setStorageList, stringToId } from "@root/utils";
+import { useGetCurrentTabUrl, setStorageList, generateId } from "@root/utils";
 import AddIcon from "@mui/icons-material/Add";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import EditIcon from "@mui/icons-material/Edit";
+import SettingsIcon from '@mui/icons-material/Settings';
+import { v4 as uuidv4 } from 'uuid';
 
 import "./App.scss";
 
@@ -17,46 +19,112 @@ const reorder = (list, startIndex, endIndex) => {
   return result;
 };
 
+const checkForId = (items, key) => {
+  return items.map(item =>{
+    if ("id" in item) {
+      return item
+    }
+    let id = null
+    if (key == "shortcut") {
+      id = generateId(item.name)
+    }
+    else if (key == "ports") {
+      id = uuidv4()
+    }
+    return {
+      ...item,
+      id
+    }
+  })
+};
+
+
+const setupList = (prev, json, key)=> {
+  const value = checkForId(json?.[key].items, key)
+  const action = json?.[key]?.action;
+  switch (action) {
+    case "set":
+      return value;
+    case 'add':
+      return [...prev, value];
+    }
+};
+
 function App(props) {
   const { data } = props;
 
-  const [openDialog, setOpenDialog] = useState(false);
+  const [openDialogNewForm, setOpenDialogNewForm] = useState(false);
+  const [openDialogSettings, setOpenDialogSettings] = useState(false);
   const inputRef = useRef(null);
 
-  const [shortcutList, setShortcutList] = useState(data);
+  const [shortcutList, setShortcutList] = useState(data.shortcut);
+  const [porstList, setPortsList] = useState(data.ports);
   const [canWrite, setCanWrite] = useState(false);
 
   const [edition, setEdition] = useState(false);
 
+  const [formData, setFormData] = useState({
+    id: null,
+    name: null,
+    pattern: null
+  })
+
   useEffect(() => {
     if (canWrite) {
-      setStorageList(shortcutList);
+      setStorageList({
+        shortcut: shortcutList,
+        ports: porstList
+      });
       setCanWrite(false);
     }
-  }, [shortcutList]);
+  }, [shortcutList, porstList]);
 
   const handleOnCloseDialog = () => {
-    setOpenDialog(false);
+    setOpenDialogNewForm(false);
+    setOpenDialogSettings(false);
   };
 
-  const handleSubmitForm = (data) => {
+  const handleSubmitForm = (data, edit) => {
     setCanWrite(true);
-    setShortcutList((prev) => {
-      if (Array.isArray(prev)) {
-        return [
-          ...prev,
-          { id: stringToId(data.name), name: data.name, pattern: data.pattern },
-        ];
-      } else if (typeof prev === "object") {
-        return [
-          { id: stringToId(data.name), name: data.name, pattern: data.pattern },
-        ];
-      }
-    });
+    if (edit) {
+      setShortcutList((prev)=>{
+        return prev.map((item)=>{
+          if (item.id === data.id) {
+            return data
+          }
+          return item
+        })
+      })
+    } else {  
+      setShortcutList((prev) => {
+        if (data.id && data.id !== ""){
+          prev.map(
+            (shortcut) => {
+              if (shortcut.id === data.id) {
+                return {
+                  ...data
+                }
+              }
+              return shortcut
+            }
+          )
+        }
+        if (Array.isArray(prev)) {
+          return [
+            ...prev,
+            { id: generateId(data.name, shortcutList), name: data.name, pattern: data.pattern },
+          ];
+        } else if (typeof prev === "object") {
+          return [
+            { id: generateId(data.name, shortcutList), name: data.name, pattern: data.pattern },
+          ];
+        }
+      });
+    }
   };
 
   const onClickButtonNewShortcut = () => {
-    setOpenDialog(true);
+    setOpenDialogNewForm(true);
   };
 
   const onClickImport = () => {
@@ -67,8 +135,21 @@ function App(props) {
     setEdition((prev) => !prev);
   };
 
+  const onClickSettings = ( ) => {
+    setOpenDialogSettings(true);
+  }
+
   const generateFileUrl = () => {
-    const exportData = JSON.stringify(shortcutList, null, 4);
+    const exportData = JSON.stringify({
+      shortcut: {
+        action: "set",
+        items: shortcutList
+      },
+      ports: {
+        action: "set",
+        items: porstList
+      }
+    }, null, 4);
     const blob = new Blob([exportData], { type: "application/json" });
     return window.URL.createObjectURL(blob);
   };
@@ -82,26 +163,10 @@ function App(props) {
     reader.addEventListener("load", (event) => {
       let json = JSON.parse(atob(event.target.result.split(",")[1]));
       // todo add schema verifaction
+      setShortcutList(prev => setupList(prev, json, "shortcut"))
       setCanWrite(true);
-      if (Array.isArray(json)) {
-        json = json.map((item) => {
-          const id = item.id ? item.id : stringToId(item.name);
-          return {
-            ...item,
-            id,
-          };
-        });
-        setShortcutList((prev) => {
-          if (Array.isArray(prev)) {
-            return [...prev, ...json];
-          }
-          return json;
-        });
-      } else if (typeof json === "object") {
-        const id = json.id ? json.id : stringToId(json.name);
-        setShortcutList((prev) => [...prev, { ...json, id }]);
-      }
-    });
+      setPortsList(prev => setupList(prev, json, "ports"))
+      })
     reader.readAsDataURL(fileObj);
   };
 
@@ -113,10 +178,8 @@ function App(props) {
   };
 
   const currentTabUrl = useGetCurrentTabUrl() || "";
-  // const currentTabUrl = ""
 
   const onDragEnd = (result) => {
-    // dropped outside the list
     if (!result.destination) {
       return;
     }
@@ -125,6 +188,26 @@ function App(props) {
       reorder(prev, result.source.index, result.destination.index),
     );
   };
+
+  const onClickEdit = (data) => {
+    const editId = data.target.attributes.buttonid.value;
+    if (!editId || editId === '') {
+      return
+    }
+    const editObj = shortcutList.filter((shortcut)=> shortcut.id === editId)
+    if(editObj.length < 1) {
+      return
+    }
+    setFormData({...editObj[0]})
+    setOpenDialogNewForm(true)
+  }
+
+  const onSubmitSettingsForm = (data) => {
+    if ("ports" in data) {
+      setCanWrite(true);
+      setPortsList(data.ports)
+    }
+  }
 
   return (
     <>
@@ -136,6 +219,7 @@ function App(props) {
             edition={edition}
             shortcutList={shortcutList}
             onObjDragEnd={onDragEnd}
+            onClickEdit={onClickEdit}
           >
             {(shortcut) => (
               <>
@@ -148,6 +232,7 @@ function App(props) {
                   currentTabUrl={currentTabUrl}
                   edition={edition}
                   onDeletion={onDeletion}
+                  ports={porstList}
                 />
               </>
             )}
@@ -204,14 +289,33 @@ function App(props) {
                 <EditIcon color="primary" />
               </IconButton>
             </Tooltip>
+            <Tooltip title="Settings" className="settings-shortcut-tooltip">
+              <IconButton
+                className="settings-shortcut-button"
+                aria-label="Settings"
+                variant="outlined"
+                onClick={onClickSettings}
+                color="primary"
+              >
+                <SettingsIcon color="primary" />
+              </IconButton>
+            </Tooltip>
           </div>
         </Stack>
       </Box>
-      <NewShortcutForm
-        open={openDialog}
+      {openDialogNewForm ? <NewShortcutForm
+        open={openDialogNewForm}
         onClose={handleOnCloseDialog}
         onSubmitForm={handleSubmitForm}
-      />
+        formData={formData}
+        edit={edition}
+      /> : <></> }
+      {openDialogSettings ? <SettingsForm
+        open={openDialogSettings}
+        onClose={handleOnCloseDialog}
+        portList={porstList}
+        onSubmitForm={onSubmitSettingsForm}
+      /> : <></> }
     </>
   );
 }

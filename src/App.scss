@@ -1,3 +1,7 @@
+body {
+  min-width: 420px;
+}
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -44,6 +48,14 @@
   display: none;
 }
 
+.drag-wrapper .edit-button {
+  position: absolute;
+  height: 100%;
+  width: 70%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0;
+}
 
 input {
   width: 100%;
