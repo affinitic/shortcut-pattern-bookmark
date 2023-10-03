@@ -5,6 +5,7 @@ This extension is used to create shortcut base on a patern as bookmark for a typ
 ## Installation
 1. Clone this repo.
 1. In Chrome, go to Window/Extensions. In Arc go to Extensions/Manage Extension.
+1. Activate the developer mode
 1. Click on "Load unpacked" and select the dist folder.
 1. For installing the plone preset, click on "Import" button (Up arrow) and select "Preset-plone.json" in the repo.
 
@@ -35,3 +36,6 @@ You can export and import shortcut and port settings by clicking on the arrow at
 - Create an icon
 - Publish on the extension library
 - Add folder to arrange shortcut
+
+## Contributors
+@jimbiscuit
