@@ -25,8 +25,8 @@ export const useGetCurrentTabUrl = () => {
   }
 };
 
-export const onClickShortcut = (patern, newTab) => {
-  chrome.runtime.sendMessage({ type: CLICK_SHORTCUT, patern, newTab });
+export const onClickShortcut = (patern, newTab, ports) => {
+  chrome.runtime.sendMessage({ type: CLICK_SHORTCUT, patern, newTab, ports });
 };
 
 export function setStorageList(data) {
