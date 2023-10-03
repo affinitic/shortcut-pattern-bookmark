@@ -5,7 +5,7 @@ import {
   getStorageList,
   useLocalStorage,
 } from "./chrome";
-import { stringToId } from "./string";
+import { generateId } from "./string";
 import { newUrlGeneration, extractPartOfUrl } from "./url";
 
 export {
@@ -14,7 +14,7 @@ export {
   setStorageList,
   getStorageList,
   useLocalStorage,
-  stringToId,
+  generateId,
   newUrlGeneration,
   extractPartOfUrl,
 };
