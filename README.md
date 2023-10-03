@@ -38,4 +38,4 @@ You can export and import shortcut and port settings by clicking on the arrow at
 - Add folder to arrange shortcut
 
 ## Contributors
-@jimbiscuit
+[@jimbiscuit](https://github.com/jimbiscuit) 
