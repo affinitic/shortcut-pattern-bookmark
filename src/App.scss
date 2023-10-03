@@ -39,3 +39,44 @@
     }
   }
 }
+
+.field.hidden {
+  display: none;
+}
+
+
+input {
+  width: 100%;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+
+
+  label.main {
+    font-weight: bold;
+  }
+
+  label.description {
+    font-size: 12px;
+  }
+
+  label.exemple {
+    font-size: 12px;
+  }
+}
+
+.form {
+  padding-inline: 1rem;
+  padding-block-end: 1rem;
+
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}
