@@ -1,39 +1,47 @@
-const portPatern = [
-  {
-    from: 8080,
-    to: 8089,
-    siteRoots: ["plone", "Plone"],
-  },
-  {
-    from: 3000,
-    to: 3000,
-    siteRoots: null,
-  },
-];
+const checkPortValidation = (portToCheck, portsPattern) => {
+  let output = false
+  portsPattern.split(',').forEach(port=>{
+    const portClean = port.trim();
+    let rangePort = portClean.split('-');
+    if (rangePort.length === 1) {
+      rangePort = [rangePort[0], rangePort[0] ]
+    }
+    if (portToCheck <= rangePort[0] && portToCheck >= rangePort[1]) {
+      output = true
+      return
+    }
+  })
 
-const getSiteRoot = (url, port) => {
+  return output
+}
+
+const getSiteRoot = (url, port, ports) => {
   let result = "";
-  portPatern.forEach((patern) => {
-    if (port >= patern.from && port <= patern.to) {
+  if (!ports) {return result}
+  ports.forEach((patern) => {
+    if (checkPortValidation(port, patern.ports)) {
       if (!patern.siteRoots) {
-        result = null;
         return;
       }
       patern.siteRoots.forEach((siteRoot) => {
+        if (siteRoot === "{%no_site_root%}") {
+          result = null;
+          return;
+        }
         if (url.startsWith(siteRoot)) {
           result = siteRoot;
           return;
         }
-        result = url.split("/")[0];
-        return;
       });
-      return;
     }
   });
+  if (result === "") {
+    result = url.split("/")[0];
+  }
   return result;
 };
 
-export const extractPartOfUrl = (inputUrl) => {
+export const extractPartOfUrl = (inputUrl, ports) => {
   let url = inputUrl;
 
   const result = {
@@ -70,7 +78,7 @@ export const extractPartOfUrl = (inputUrl) => {
   url = url.slice(domainAndPort.length + 1);
 
   if (result["port"]) {
-    result["siteRoot"] = getSiteRoot(url, result["port"]);
+    result["siteRoot"] = getSiteRoot(url, result["port"], ports);
     if (result["siteRoot"]) {
       url = url.slice(result["siteRoot"].length + 1);
     }
@@ -88,12 +96,12 @@ export const extractPartOfUrl = (inputUrl) => {
   return result;
 };
 
-export const newUrlGeneration = (url, patern) => {
+export const newUrlGeneration = (url, patern, ports) => {
   if (!url || !patern) {
     return "";
   }
 
-  const urlObj = extractPartOfUrl(url);
+  const urlObj = extractPartOfUrl(url, ports);
   let start = "";
   if (urlObj.scheme) {
     start = start + urlObj.scheme;
@@ -101,8 +109,15 @@ export const newUrlGeneration = (url, patern) => {
   if (urlObj.domain) {
     start = start + urlObj.domain;
   }
+  let port = "";
   if (urlObj.port) {
-    start = start + ":" + urlObj.port + "/" + urlObj.siteRoot;
+    port = ":" + urlObj.port;
+  }
+  if (urlObj.siteRoot) {
+    port = port + "/" + urlObj.siteRoot
+  }
+  if (port !== "") {
+    start = start + port;
   }
   if (start === "") {
     start = null;
@@ -110,7 +125,7 @@ export const newUrlGeneration = (url, patern) => {
   const paternMapping = {
     "{%scheme%}": urlObj.scheme,
     "{%domain%}": urlObj.domain,
-    "{%port%}": urlObj.port ? ":" + urlObj.port + "/" + urlObj.siteRoot : null,
+    "{%port%}": port !== "" ? port : null,
     "{%start%}": start,
     "{%path%}": urlObj.path ? "/" + urlObj.path : null,
     "{%query%}": urlObj.query ? "?" + urlObj.query : null,
