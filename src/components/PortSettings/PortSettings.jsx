@@ -1,63 +1,71 @@
-import React, {useState} from 'react'
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Tooltip, IconButton, DialogTitle } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { useEffect } from 'react';
-import {ButtonIcon} from '..';
+import { useEffect } from "react";
+import { ButtonIcon } from "..";
 
-import './PortSettings.scss';
+import "./PortSettings.scss";
 
 const blankValue = {
   id: uuidv4(),
   ports: null,
-  siteRoots: null
-}
+  siteRoots: null,
+};
 
 const formToData = (formData) => {
-  const tempOut = {}
-  Object.keys(formData).forEach(key => {
-    const keySplit = key.split('_')
+  const tempOut = {};
+  Object.keys(formData).forEach((key) => {
+    const keySplit = key.split("_");
     const id = keySplit[1];
-    const field = keySplit[0]
-    let value = formData[key]
+    const field = keySplit[0];
+    let value = formData[key];
     if (field === "siteRoots" && !Array.isArray(value)) {
-      value = formData[key] ? formData[key].split(",").map(value => value.trim()) : undefined;
+      value = formData[key]
+        ? formData[key].split(",").map((value) => value.trim())
+        : undefined;
     }
     if (id in tempOut) {
       tempOut[id][field] = value;
     } else {
-      tempOut[id] = {[field] : value};
+      tempOut[id] = { [field]: value };
     }
-  })
-  const output = Object.values(tempOut).sort((a,b)=>{
-    const x = a.order;
-    const y = b.order;
-    if(x>y){return 1;} 
-    if(x<y){return -1;}
-    return 0;
-  }).map((item)=>{
-    const {order, ...values} = item;
-    return values;
-  })
+  });
+  const output = Object.values(tempOut)
+    .sort((a, b) => {
+      const x = a.order;
+      const y = b.order;
+      if (x > y) {
+        return 1;
+      }
+      if (x < y) {
+        return -1;
+      }
+      return 0;
+    })
+    .map((item) => {
+      const { order, ...values } = item;
+      return values;
+    });
   return output;
-}
+};
 
 const transformValueToDefault = (values) => {
-  const output = {}
-  values.forEach((value, index)=>{
-    Object.keys(value).forEach((key)=>{
-      let ouputValue = value[key]
+  const output = {};
+  values.forEach((value, index) => {
+    Object.keys(value).forEach((key) => {
+      let ouputValue = value[key];
       if (Array.isArray(ouputValue)) {
-        ouputValue.join(", ")
+        ouputValue.join(", ");
       }
-      output[`${key}_${value.id}`] = ouputValue
-    })
-    output[`order_${value.id}`] = index
-  })
+      output[`${key}_${value.id}`] = ouputValue;
+    });
+    output[`order_${value.id}`] = index;
+  });
   return output;
-}
+};
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -68,40 +76,39 @@ const reorder = (list, startIndex, endIndex) => {
 };
 
 export const PortSettings = (props) => {
-  const {value, onSubmitForm} = props;
+  const { value, onSubmitForm } = props;
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
-    unregister
+    unregister,
   } = useForm({
-    defaultValues: transformValueToDefault(value)
+    defaultValues: transformValueToDefault(value),
   });
 
   const onSubmit = (data) => {
     onSubmitForm(formToData(data));
   };
 
-  const [portList, setPortList] = useState(value ? value : [blankValue])
+  const [portList, setPortList] = useState(value ? value : [blankValue]);
 
   useEffect(() => {
     portList.forEach((port, index) => {
-      setValue(`order_${port.id}`,index)
-    })
-  },[portList])
+      setValue(`order_${port.id}`, index);
+    });
+  }, [portList]);
 
   const onClickButtonNewPorts = () => {
-    setPortList(prev => [...prev, { ...blankValue, id:uuidv4() }])
-  }
+    setPortList((prev) => [...prev, { ...blankValue, id: uuidv4() }]);
+  };
 
   const onDragEnd = (result) => {
-    setPortList((prev)=> 
+    setPortList((prev) =>
       reorder(prev, result.source.index, result.destination.index),
-    )
-
-  }
+    );
+  };
 
   const getItemStyle = (isDragging, draggableStyle) => {
     return {
@@ -122,17 +129,11 @@ export const PortSettings = (props) => {
     display: "flex",
     gap: "1rem",
     flexDirection: "column",
-
   });
 
-  const onClickDelete = (data, id)=> {
-    setPortList((prev)=>prev.filter((item => item.id !== id)))
-    unregister([
-      `order_${id}`,
-      `id_${id}`,
-      `ports_${id}`,
-      `siteRoots_${id}`
-    ])
+  const onClickDelete = (data, id) => {
+    setPortList((prev) => prev.filter((item) => item.id !== id));
+    unregister([`order_${id}`, `id_${id}`, `ports_${id}`, `siteRoots_${id}`]);
   };
 
   return (
@@ -148,86 +149,116 @@ export const PortSettings = (props) => {
                   ref={provided.innerRef}
                   style={getListStyle(snapshot.isDraggingOver)}
                 >
-                  {portList.map((port, index) =>{
+                  {portList.map((port, index) => {
                     return (
-                    <Draggable
-                      key={port.id}
-                      draggableId={port.id}
-                      index={index}
-                    >
-                      {(provided, snapshot) => (
-                        <div
-                          className="drag-wrapper"
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          style={getItemStyle(
-                            snapshot.isDragging,
-                            provided.draggableProps.style,
-                          )}
-                        >
-                          <div className="delete-button">
-                            <ButtonIcon
-                              name="close"
-                              title="Delete"
-                              onClick={onClickDelete}
-                              id={port.id} 
-                            />
-                          </div>
-                          <div className={`port-${port.id}-group port-group`}>
-                            <div className={`order-${port.id}-field field hidden`}>
-                              <input
-                                type="hidden"
-                                {...register(`order_${port.id}`, { required: false })}
+                      <Draggable
+                        key={port.id}
+                        draggableId={port.id}
+                        index={index}
+                      >
+                        {(provided, snapshot) => (
+                          <div
+                            className="drag-wrapper"
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            style={getItemStyle(
+                              snapshot.isDragging,
+                              provided.draggableProps.style,
+                            )}
+                          >
+                            <div className="delete-button">
+                              <ButtonIcon
+                                name="close"
+                                title="Delete"
+                                onClick={onClickDelete}
+                                id={port.id}
                               />
                             </div>
-                            <div className={`id-${port.id}-field field hidden`}>
-                              <input readOnly type="hidden" {...register(`id_${port.id}`, { required: false })}/>
-                            </div>
-                            <div className={`ports-${port.id}-field field`}>
-                              <label className="main">Ports</label>
-                              <label className="description">
-                                List of port, separated by a comma or use dash for range.
-                              </label>
-                              <input {...register(`ports_${port.id}`, { required: true })} />
-                              {errors[`ports_${port.id}`] && (
-                                <span className="error">This field is required</span>
-                              )}
-                            </div>
-                            <div className={`siteRoots-${port.id}-field field`}>
-                              <label className="main">Site root</label>
-                              <label className="description">
-                                {"List of site root associate to, comma separated. You can use {%no_site_root%} if there is no site root needed."}
-                              </label>
-                              <input {...register(`siteRoots_${port.id}`, { required: true })}/>
-                              {errors[`siteRoots_${port.id}`] && (
-                                <span className="error">This field is required</span>
-                              )}
+                            <div className={`port-${port.id}-group port-group`}>
+                              <div
+                                className={`order-${port.id}-field field hidden`}
+                              >
+                                <input
+                                  type="hidden"
+                                  {...register(`order_${port.id}`, {
+                                    required: false,
+                                  })}
+                                />
+                              </div>
+                              <div
+                                className={`id-${port.id}-field field hidden`}
+                              >
+                                <input
+                                  readOnly
+                                  type="hidden"
+                                  {...register(`id_${port.id}`, {
+                                    required: false,
+                                  })}
+                                />
+                              </div>
+                              <div className={`ports-${port.id}-field field`}>
+                                <label className="main">Ports</label>
+                                <label className="description">
+                                  List of port, separated by a comma or use dash
+                                  for range.
+                                </label>
+                                <input
+                                  {...register(`ports_${port.id}`, {
+                                    required: true,
+                                  })}
+                                />
+                                {errors[`ports_${port.id}`] && (
+                                  <span className="error">
+                                    This field is required
+                                  </span>
+                                )}
+                              </div>
+                              <div
+                                className={`siteRoots-${port.id}-field field`}
+                              >
+                                <label className="main">Site root</label>
+                                <label className="description">
+                                  {
+                                    "List of site root associate to, comma separated. You can use {%no_site_root%} if there is no site root needed."
+                                  }
+                                </label>
+                                <input
+                                  {...register(`siteRoots_${port.id}`, {
+                                    required: true,
+                                  })}
+                                />
+                                {errors[`siteRoots_${port.id}`] && (
+                                  <span className="error">
+                                    This field is required
+                                  </span>
+                                )}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      )}
-                    </Draggable>
-                  )})}
+                        )}
+                      </Draggable>
+                    );
+                  })}
                   {provided.placeholder}
                 </div>
               )}
             </Droppable>
           </DragDropContext>
-        <Tooltip title="Add new ports" className="new-ports-tooltip">
-          <IconButton
-            className="new-ports-button"
-            aria-label="Add new ports"
-            variant="outlined"
-            onClick={onClickButtonNewPorts}
-            color="primary"
-          >
-            <AddIcon color="primary" />
-          </IconButton>
-        </Tooltip>
-        <input type="submit" />
+          <Tooltip title="Add new ports" className="new-ports-tooltip">
+            <IconButton
+              className="new-ports-button"
+              aria-label="Add new ports"
+              variant="outlined"
+              onClick={onClickButtonNewPorts}
+              color="primary"
+            >
+              <AddIcon color="primary" />
+            </IconButton>
+          </Tooltip>
+          <input type="submit" />
         </form>
       </div>
     </div>
-  )
-}
+  );
+};

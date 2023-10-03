@@ -58,7 +58,7 @@ export const ShortcutList = (props) => {
                       provided.draggableProps.style,
                     )}
                   >
-                    <Button 
+                    <Button
                       title="Edit"
                       onClick={onClickEdit}
                       buttonId={shortcut.id}

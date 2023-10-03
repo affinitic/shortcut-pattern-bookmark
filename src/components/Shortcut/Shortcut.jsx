@@ -6,7 +6,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import MenuIcon from "@mui/icons-material/Menu";
 
 export const Shortcut = (props) => {
-  const { name, pattern, id, currentTabUrl, edition, onDeletion, ports } = props;
+  const { name, pattern, id, currentTabUrl, edition, onDeletion, ports } =
+    props;
   const transformUrl = newUrlGeneration(currentTabUrl, pattern);
   const onClick = (event) => {
     if (!edition) {

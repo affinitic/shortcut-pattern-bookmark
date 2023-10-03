@@ -5,4 +5,11 @@ import { PortSettings } from "./PortSettings/PortSettings";
 import { SettingsForm } from "./SettingsForm/SettingsForm";
 import { ButtonIcon } from "./ButtonIcon/ButtonIcon";
 
-export { NewShortcutForm, Shortcut, ShortcutList, PortSettings, SettingsForm, ButtonIcon };
+export {
+  NewShortcutForm,
+  Shortcut,
+  ShortcutList,
+  PortSettings,
+  SettingsForm,
+  ButtonIcon,
+};

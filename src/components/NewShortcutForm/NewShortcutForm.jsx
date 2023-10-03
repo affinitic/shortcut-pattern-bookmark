@@ -11,7 +11,7 @@ export const NewShortcutForm = (props) => {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    defaultValues: formData
+    defaultValues: formData,
   });
   const onSubmit = (data) => {
     onSubmitForm(data, edit);
@@ -27,7 +27,7 @@ export const NewShortcutForm = (props) => {
       <div className="form">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="id-field field hidden">
-            <input 
+            <input
               readOnly
               type="hidden"
               {...register("id", { required: false })}
@@ -39,7 +39,7 @@ export const NewShortcutForm = (props) => {
             <label className="description">
               Enter the name for the shortcut
             </label>
-            <input {...register("name", { required: true })}  />
+            <input {...register("name", { required: true })} />
             {errors.name && (
               <span className="error">This field is required</span>
             )}
@@ -49,7 +49,7 @@ export const NewShortcutForm = (props) => {
             <label className="description">
               Enter the pattern that will be use for the shortcut
             </label>
-            <input {...register("pattern", { required: true })}  />
+            <input {...register("pattern", { required: true })} />
             {errors.pattern && (
               <span className="error">This field is required</span>
             )}

@@ -1,23 +1,25 @@
 const checkPortValidation = (portToCheck, portsPattern) => {
-  let output = false
-  portsPattern.split(',').forEach(port=>{
+  let output = false;
+  portsPattern.split(",").forEach((port) => {
     const portClean = port.trim();
-    let rangePort = portClean.split('-');
+    let rangePort = portClean.split("-");
     if (rangePort.length === 1) {
-      rangePort = [rangePort[0], rangePort[0] ]
+      rangePort = [rangePort[0], rangePort[0]];
     }
     if (portToCheck <= rangePort[0] && portToCheck >= rangePort[1]) {
-      output = true
-      return
+      output = true;
+      return;
     }
-  })
+  });
 
-  return output
-}
+  return output;
+};
 
 const getSiteRoot = (url, port, ports) => {
   let result = "";
-  if (!ports) {return result}
+  if (!ports) {
+    return result;
+  }
   ports.forEach((patern) => {
     if (checkPortValidation(port, patern.ports)) {
       if (!patern.siteRoots) {
@@ -114,7 +116,7 @@ export const newUrlGeneration = (url, patern, ports) => {
     port = ":" + urlObj.port;
   }
   if (urlObj.siteRoot) {
-    port = port + "/" + urlObj.siteRoot
+    port = port + "/" + urlObj.siteRoot;
   }
   if (port !== "") {
     start = start + port;
