@@ -20,7 +20,6 @@ const iconMapping = {
 }
 
 export const ButtonIcon = (props) => {
-  console.log("🚀 ~ file: ButtonIcon.jsx:23 ~ ButtonIcon ~ props:", props)
   const {onClick, className, name, color, title, id} = props;
   const Icon = iconMapping[name]
   const onClickProps = (data) => {
