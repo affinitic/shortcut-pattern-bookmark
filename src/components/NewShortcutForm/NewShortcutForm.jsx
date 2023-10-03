@@ -5,14 +5,16 @@ import { Dialog, DialogTitle } from "@mui/material";
 import "./NewShortcutForm.scss";
 
 export const NewShortcutForm = (props) => {
-  const { onClose, onSubmitForm, open } = props;
+  const { onClose, onSubmitForm, open, formData, edit } = props;
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: formData
+  });
   const onSubmit = (data) => {
-    onSubmitForm(data);
+    onSubmitForm(data, edit);
     onClose();
   };
   const handleClose = () => {
@@ -21,16 +23,24 @@ export const NewShortcutForm = (props) => {
 
   return (
     <Dialog onClose={handleClose} open={open} className="newShortcutForm">
-      <DialogTitle>Add new shortcut</DialogTitle>
+      <DialogTitle>{`${edit ? "Edit" : "Add new"} shortcut`}</DialogTitle>
       <div className="form">
         <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="id-field field hidden">
+            <input 
+              readOnly
+              type="hidden"
+              {...register("id", { required: false })}
+              value={formData.id && formData.id}
+            />
+          </div>
           <div className="name-field field">
             <label className="main">Name</label>
             <label className="description">
               Enter the name for the shortcut
             </label>
-            <input {...register("name", { required: true })} />
-            {errors.exampleRequired && (
+            <input {...register("name", { required: true })}  />
+            {errors.name && (
               <span className="error">This field is required</span>
             )}
           </div>
@@ -39,8 +49,8 @@ export const NewShortcutForm = (props) => {
             <label className="description">
               Enter the pattern that will be use for the shortcut
             </label>
-            <input {...register("pattern", { required: true })} />
-            {errors.exampleRequired && (
+            <input {...register("pattern", { required: true })}  />
+            {errors.pattern && (
               <span className="error">This field is required</span>
             )}
             <label className="exemple">
