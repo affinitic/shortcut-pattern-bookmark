@@ -15,5 +15,11 @@
     "service_worker": "src/background.js",
     "type": "module",
     "persistent": false
+  },
+  "icons": {
+    "16": "icon_16.png",
+    "32": "icon_32.png",
+    "48": "icon_48.png",
+    "128": "icon_128.png"
   }
 }
