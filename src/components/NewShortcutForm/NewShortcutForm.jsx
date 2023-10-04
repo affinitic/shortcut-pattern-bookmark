@@ -2,8 +2,6 @@ import PropTypes from "prop-types";
 import { useForm } from "react-hook-form";
 import { Dialog, DialogTitle } from "@mui/material";
 
-import "./NewShortcutForm.scss";
-
 export const NewShortcutForm = (props) => {
   const { onClose, onSubmitForm, open, formData, edit } = props;
   const {
