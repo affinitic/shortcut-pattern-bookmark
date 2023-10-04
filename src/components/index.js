@@ -5,6 +5,7 @@ import { ShortcutList } from "./ShortcutList/ShortcutList";
 import { PortSettings } from "./PortSettings/PortSettings";
 import { SettingsForm } from "./SettingsForm/SettingsForm";
 import { ButtonIcon } from "./ButtonIcon/ButtonIcon";
+import { DisplaySchemaError } from "./DisplaySchemaError/DisplaySchemaError";
 
 export {
   Extension,
@@ -14,4 +15,5 @@ export {
   PortSettings,
   SettingsForm,
   ButtonIcon,
+  DisplaySchemaError
 };

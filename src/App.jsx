@@ -3,7 +3,9 @@ import {Extension} from '@root/components';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import { ToastContainer } from 'react-toastify';
 
+import 'react-toastify/dist/ReactToastify.css';
 import "./App.scss";
 
 
@@ -30,6 +32,7 @@ function App(props) {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Extension {...props}/>
+      <ToastContainer />
     </ThemeProvider>
 
   )

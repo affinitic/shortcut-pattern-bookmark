@@ -4,6 +4,7 @@ import {
   Shortcut,
   ShortcutList,
   SettingsForm,
+  DisplaySchemaError
 } from "@root/components";
 import { Tooltip, IconButton, Stack, Box } from "@mui/material";
 import { useGetCurrentTabUrl, setStorageList, generateId } from "@root/utils";
@@ -13,6 +14,10 @@ import FileUploadIcon from "@mui/icons-material/FileUpload";
 import EditIcon from "@mui/icons-material/Edit";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { v4 as uuidv4 } from "uuid";
+import { Draft07 } from "json-schema-library";
+import { toast } from 'react-toastify';
+
+import {importSchema} from '@root/constants/schema';
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -173,7 +178,12 @@ export const Extension = (props) => {
     const reader = new FileReader();
     reader.addEventListener("load", (event) => {
       let json = JSON.parse(atob(event.target.result.split(",")[1]));
-      // todo add schema verifaction
+      const jsonSchema = new Draft07(importSchema);
+      const errors = jsonSchema.validate(json);
+      if (errors) {
+        toast.error(<DisplaySchemaError errors={errors} />, {closeOnClick: false})
+        return
+      }
       setShortcutList((prev) => setupList(prev, json, "shortcut"));
       setCanWrite(true);
       setPortsList((prev) => setupList(prev, json, "ports"));
