@@ -32,11 +32,7 @@ Click on the "pen" icon at the bottom of the extension window. You can edit the 
 You can export and import shortcut and port settings by clicking on the arrow at the bottom of the extension window. By default when you export the action is set to 'set', in these case when imported it will override every thing already set, it can also be set to 'add', with that the content of the file will be append to the existing settings. The id part is not required, it will be generated at import.
 
 ## What's next
-- Add edition of a shortcut (change name and patern)
-- Add settings window
-- Add the possibility to customize the root site
 - Create a Firefox version
-- Create an icon
 - Publish on the extension library
 - Add folder to arrange shortcut
 
