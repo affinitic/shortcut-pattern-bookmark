@@ -180,7 +180,7 @@ export const Extension = (props) => {
       let json = JSON.parse(atob(event.target.result.split(",")[1]));
       const jsonSchema = new Draft07(importSchema);
       const errors = jsonSchema.validate(json);
-      if (errors) {
+      if (errors.length >= 1) {
         toast.error(<DisplaySchemaError errors={errors} />, {closeOnClick: false})
         return
       }
