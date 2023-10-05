@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Shortcut Pattern Bookmark",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "This extension is used to create shortcut with pattern as bookmark for website (eg: Plone, Wordpress, ...)",
   "action": {
     "default_popup": "index.html"
