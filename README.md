@@ -2,7 +2,11 @@
 
 This extension is used to create shortcut base on a pattern as bookmark for a type of website (eg: Plone, Wordpress, ...)
 
-## Installation
+## Instalation
+### Stable
+Install via [Chrome extension store](https://chrome.google.com/webstore/detail/shortcut-patern-bookmark/fneleejokehnmfkbnjfeahieblhaecho/related?hl=en-US)
+
+### Dev
 1. Clone this repo.
 1. In Chrome, go to Window/Extensions. In Arc go to Extensions/Manage Extension.
 1. Activate the developer mode.
@@ -32,9 +36,13 @@ Click on the "pen" icon at the bottom of the extension window. You can edit the 
 You can export and import shortcut and port settings by clicking on the arrow at the bottom of the extension window. By default when you export the action is set to 'set', in these case when imported it will override every thing already set, it can also be set to 'add', with that the content of the file will be append to the existing settings. The id part is not required, it will be generated at import.
 
 ## What's next
-- Create a Firefox version
-- Publish on the extension library
+- Create a Firefox version and publish it
 - Add folder to arrange shortcut
+- Give more options for root site detection
+- Filter shortcut on port settings or on url
+- Improve form UI
 
 ## Contributors
-- [@jimbiscuit](https://github.com/jimbiscuit) 
+- [@jimbiscuit](https://github.com/jimbiscuit)
+- [@mpeeters](https://github.com/mpeeters)
+- [@daggelpop](https://github.com/daggelpop)
