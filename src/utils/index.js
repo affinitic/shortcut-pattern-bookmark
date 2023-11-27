@@ -2,7 +2,6 @@ import {
   useGetCurrentTabUrl,
   onClickShortcut,
   setStorageList,
-  getStorageList,
   useLocalStorage,
 } from "./chrome";
 import { generateId } from "./string";
@@ -12,7 +11,6 @@ export {
   useGetCurrentTabUrl,
   onClickShortcut,
   setStorageList,
-  getStorageList,
   useLocalStorage,
   generateId,
   newUrlGeneration,
