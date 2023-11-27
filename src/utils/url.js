@@ -87,7 +87,8 @@ export const extractPartOfUrl = (inputUrl, ports) => {
   }
 
   if (url.length > 1) {
-    const pathQueryList = url.split("?");
+    const pattern = /[#?]/
+    const pathQueryList = url.split(pattern);
     result["path"] = pathQueryList[0];
 
     if (pathQueryList.length > 1) {
